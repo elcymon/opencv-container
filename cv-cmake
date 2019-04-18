@@ -1,0 +1,28 @@
+Bootstrap: localimage
+From: /home/elcymon/opencv-container/opencv-dep.simg
+
+%post
+	cd /opencv/build/
+	cmake -D CMAKE_BUILD_TYPE=RELEASE \
+	-D CMAKE_INSTALL_PREFIX=/usr/local \
+	-D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules \
+	-D PYTHON3_EXECUTABLE=/usr/bin/python3 \
+	-D PYTHON_EXECUTABLE=/usr/bin/python3 \
+	-D BUILD_EXAMPLES=OFF \
+	-D INSTALL_PYTHON_EXAMPLES=OFF \
+	-D INSTALL_C_EXAMPLES=OFF \
+	.. \
+
+
+	make -j4
+	make install
+	ldconfig
+
+	cd /
+	rm -rf /opencv /opencv_contrib
+
+%environment
+    export LC_ALL=C.UTF-8
+
+%runscript
+    "$@"
